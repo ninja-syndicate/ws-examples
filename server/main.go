@@ -18,7 +18,7 @@ var (
 	addr      = flag.String("listen", ":3333", "address to bind to")
 	addrWeb   = flag.String("listenWeb", ":8080", "web port to listen")
 	debug     = flag.String("pprof", "", "address for pprof http")
-	workers   = flag.Int("workers", 128, "max workers count")
+	workers   = flag.Int("workers", 1280, "max workers count")
 	queue     = flag.Int("queue", 1, "workers task queue size")
 	ioTimeout = flag.Duration("io_timeout", time.Millisecond*100, "i/o operations timeout")
 )
