@@ -159,4 +159,8 @@ Messages.init()
 Connection.handle("hello", function(raw) {
 	User.name = raw.name
 })
-Messages.send("hi")
+Messages.send({
+	author: User.name,
+	text:   "hello from cli",
+	time:   Date.now()
+})
