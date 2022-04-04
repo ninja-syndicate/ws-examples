@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-	"gopool"
 	"log"
 	"net"
+	"os"
 	"time"
 
 	"github.com/gobwas/ws"
@@ -16,6 +16,7 @@ import (
 
 var (
 	addr      = flag.String("listen", ":3333", "address to bind to")
+	addrWeb   = flag.String("listenWeb", ":8080", "web port to listen")
 	debug     = flag.String("pprof", "", "address for pprof http")
 	workers   = flag.Int("workers", 128, "max workers count")
 	queue     = flag.Int("queue", 1, "workers task queue size")
@@ -32,6 +33,21 @@ func main() {
 		}()
 	}
 
+	go func() {
+		wd, err := os.Getwd()
+		if err != nil {
+			panic(err)
+		}
+
+		web := http.FileServer(http.Dir(wd + "/web"))
+
+		http.Handle("/", web)
+		http.Handle("/web/", http.StripPrefix("/web/", web))
+
+		log.Printf("web is listening on %q", *addrWeb)
+		log.Fatal(http.ListenAndServe(*addrWeb, nil))
+	}()
+
 	// Initialize netpoll instance. We will use it to be noticed about incoming
 	// events from listener of user connections.
 	poller, err := netpoll.New(nil)
@@ -42,7 +58,7 @@ func main() {
 	var (
 		// Make pool of X size, Y sized work queue and one pre-spawned
 		// goroutine.
-		pool = gopool.NewPool(*workers, *queue, 1)
+		pool = NewPool(*workers, *queue, 1)
 		chat = NewChat(pool)
 		exit = make(chan struct{})
 	)
@@ -138,7 +154,7 @@ func main() {
 			err = <-accept
 		}
 		if err != nil {
-			if err != gopool.ErrScheduleTimeout {
+			if err != ErrScheduleTimeout {
 				goto cooldown
 			}
 			if ne, ok := err.(net.Error); ok && ne.Temporary() {

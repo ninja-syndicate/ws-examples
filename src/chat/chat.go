@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"gopool"
 	"io"
 	"math/rand"
 	"net"
@@ -147,11 +146,11 @@ type Chat struct {
 	us  []*User
 	ns  map[string]*User
 
-	pool *gopool.Pool
+	pool *Pool
 	out  chan []byte
 }
 
-func NewChat(pool *gopool.Pool) *Chat {
+func NewChat(pool *Pool) *Chat {
 	chat := &Chat{
 		pool: pool,
 		ns:   make(map[string]*User),

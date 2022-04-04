@@ -1,6 +1,7 @@
 function getWebSocketEndpoint() {
 	var h = window.location.href.split("/")
-	return "ws" + h[0].replace("http", "") + "//" + h[2] + "/ws";
+	var hn = window.location.hostname
+	return "ws" + h[0].replace("http", "") + "//" + hn + ":3333/ws";
 }
 
 var Connection = new Client(getWebSocketEndpoint());
