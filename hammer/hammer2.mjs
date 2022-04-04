@@ -15,9 +15,9 @@ function dial(id) {
         conn = new WebSocket(`ws://${host}/ws`)
     } catch (err) {
         console.error(err)
-        setTimeout(() => {
-            dial(id)
-        }, 1000)
+        // setTimeout(() => {
+        //     dial(id)
+        // }, 1000)
         return
     }
     let die = false;
@@ -30,10 +30,10 @@ function dial(id) {
             return
         }
 
-        console.info("Reconnecting in 1s")
-        setTimeout(() => {
-            dial(id)
-        }, 1000)
+        // console.info("Reconnecting in 1s")
+        // setTimeout(() => {
+        //     dial(id)
+        // }, 1000)
     })
 
     conn.on("open", () => {
@@ -63,6 +63,9 @@ function dial(id) {
         } else if (dat.method === "hello") {
             name = dat.params.name
             console.info(`me${id}: my name is ${name}`)
+
+        } else if (dat.method === "greet") {
+            // server say hello
 
         } else if (dat.method === "publish" && dat.params.text && dat.params.author !== name) {
             // start message explosion, well 50% likelyhood
@@ -108,11 +111,11 @@ function dial(id) {
     // }
     conn.on("error", (ev) => {
         console.error(`err${id}`, ev)
-        dial(id)
+        // dial(id)
     })
 }
 
-const imax = 10
+const imax = 1000
 let add = 0
 for (let i = 0; i < imax; i++) {
     dial(i)
