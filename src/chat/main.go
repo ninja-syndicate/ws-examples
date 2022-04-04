@@ -39,7 +39,7 @@ func main() {
 			panic(err)
 		}
 
-		web := http.FileServer(http.Dir(wd + "/web"))
+		web := http.FileServer(http.Dir(wd + "/web2"))
 
 		http.Handle("/", web)
 		http.Handle("/web/", http.StripPrefix("/web/", web))
