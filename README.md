@@ -38,3 +38,17 @@ Chat application deployed [here][website-url].
 [website-image]: https://img.shields.io/website-up-down-green-red/http/vast-beyond-95791.herokuapp.com.svg?label=running-example
 [website-url]:   https://vast-beyond-95791.herokuapp.com/#!/chat
 
+## Quick Test
+
+Server
+```bash
+cd server
+go run *
+```
+
+Client
+```bash
+cd hammer
+npm install
+node hammer2.mjs
+```
